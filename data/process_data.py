@@ -5,6 +5,11 @@ from sqlalchemy import create_engine
 import sqlite3
 
 def load_data(messages_filepath, categories_filepath):
+    '''
+    Function to load the data set from csv file and create a dataframe
+    Input: File path for both messages and categories csv files
+    Output: Returns the data frame which has Messages & Categories
+    '''
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, on = ['id'])
@@ -12,6 +17,11 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    '''
+    Function to clean the dataframe, convert the categories cloumns with respective values
+    Input: Dataframe that has to be cleaned
+    Output: Processed Dataframe
+    '''
     categories = df['categories'].str.split(';', expand = True)
     row = categories.head(1)
     category_colnames = row.applymap(lambda x: x[:-2]).iloc[0, :].tolist()
@@ -37,6 +47,11 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    '''
+    Function to save the data into a SQLite db
+    Input: Dataframe that need to be saved to SQLite db and file path wh
+    Output: Database is created in the specified filepath
+    '''
     table_name = 'Message'
     engine = create_engine('sqlite:///{}'.format(database_filename))
     df.to_sql(table_name, engine, index=False, if_exists='replace')

@@ -42,6 +42,30 @@ def index():
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+
+    #Top Five Categories
+
+    category1 =[ df.loc[df['weather_related']==1].loc[df['genre']=='direct'].count()['message'],
+	                        df.loc[df['weather_related']==1].loc[df['genre']=='news'].count()['message'],
+	                        df.loc[df['weather_related']==1].loc[df['genre']=='social'].count()['message']]
+    
+    category2 =[df.loc[df['aid_related']==1].loc[df['genre']=='direct'].count()['message'], 
+    df.loc[df['aid_related']==1].loc[df['genre']=='news'].count()['message'],
+    df.loc[df['aid_related']==1].loc[df['genre']=='social'].count()['message']]
+    
+
+    category3 =[ df.loc[df['storm']==1].loc[df['genre']=='direct'].count()['message'],
+    df.loc[df['storm']==1].loc[df['genre']=='news'].count()['message'],
+    df.loc[df['storm']==1].loc[df['genre']=='social'].count()['message']]
+
+    category4 =[ df.loc[df['earthquake']==0].loc[df['genre']=='direct'].count()['message'],
+	                        df.loc[df['earthquake']==0].loc[df['genre']=='news'].count()['message'],
+	                        df.loc[df['earthquake']==0].loc[df['genre']=='social'].count()['message']]
+    
+    category5 =[df.loc[df['food']==1].loc[df['genre']=='direct'].count()['message'], 
+    df.loc[df['food']==1].loc[df['genre']=='news'].count()['message'],
+    df.loc[df['food']==1].loc[df['genre']=='social'].count()['message']]
+
     
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
@@ -63,7 +87,66 @@ def index():
                     'title': "Genre"
                 }
             }
+        },
+        {
+            'data': [
+	        Bar(
+	            x=genre_names,
+	            y=category1,
+	            name='Weather Related'
+	        ),
+	        Bar(
+	            x=genre_names,
+	            y=category2,
+	            name="Aid_related"
+	        ),
+	        Bar(
+	            x=genre_names,
+	            y=category3,
+	            name="Storm"
+	        ),
+	        Bar(
+	            x=genre_names,
+	            y=category4,
+	            name="Earthquake"
+	        ),
+             Bar(
+	            x=genre_names,
+	            y=category5,
+	            name="Food"
+	        ),
+
+	    ],
+
+        'layout': {
+	        'title': 'Distribution of Message Genres related to natural disasters',
+	        'yaxis': {
+	            'title': "Count"
+	        },
+	        'xaxis': {
+	            'title': "Genre"
+	        }
+	    }
+
+        },
+        {
+            'data':[
+			{
+				"values": genre_counts,
+				"labels": genre_names,
+				 "domain": {"x": [0, .5]},
+      			"name": "Genre",
+      			"hoverinfo":"label+percent+name",
+      			"type":"pie"
+				}
+
+
+		],
+	    'layout': {
+	        'title': 'Distribution of Message Genres with a Pie Chart'
+	    }
         }
+
     ]
     
     # encode plotly graphs in JSON
